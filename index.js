@@ -13,10 +13,17 @@ _.str = require('underscore.string');
 _.mixin(_.str.exports());
 
 // Milo Library Modules
+
+var jadeHelpers = require('./lib/jade-helpers'),
+  routeValidate = require('./lib/validate-route');
+
+var defaults = {
+  'port': 3000
+}
+
 module.exports.init = function(config) {
 
-  var jadeHelpers = require('./lib/jade-helpers'),
-    routeValidate = require('./lib/validate-route');
+  config = _.extend(defaults, config);
 
   var bindRoute = function(routeFile) {
 
@@ -59,12 +66,12 @@ module.exports.init = function(config) {
     });
 
     console.log('-----------------------------------');
-    console.log('Milo is listening on localhost:3000');
+    console.log('Milo is listening on localhost:' + config.port);
     console.log('-----------------------------------\n');
 
     http.createServer(function(req, res) {
       ramrod.dispatch(req, res);
-    }).listen(3000);
+    }).listen(config.port);
 
   });
 }
