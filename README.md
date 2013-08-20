@@ -8,4 +8,5 @@ Routes, models, schemas, relationships, layouts.
 Todo:
 -----
 
-* Need to
+* `/services` folder, hook up to routes.
+* Extensibility. How would I make a Sass pipeline, etc.?
