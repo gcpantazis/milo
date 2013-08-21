@@ -37,8 +37,15 @@ module.exports.init = function(config) {
       // Set out in the route's JSON file.
 
       if (routeValidate(config, data)) {
-        res.writeHead(200);
-        res.end(jade.renderFile(layoutPath, data));
+        if (data.layout) {
+          res.writeHead(200);
+          res.end(jade.renderFile(layoutPath, data));
+        } else if (data.service) {
+          require(process.cwd() + '/' + config.servicesDir + '/' + data.service)(req, res, data)
+        } else {
+          res.writeHead(500);
+          res.end('500 - ROUTE NOT MAPPED TO VALID OUTPUT');
+        }
       } else {
         res.writeHead(404);
         res.end('404 - NOT FOUND');
