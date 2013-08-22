@@ -3,7 +3,7 @@ Milo
 
 *v0.0.1*
 
-Routes, models, schemas, relationships, layouts.
+In progress. Ideas for a db-less server / static site generator that's as flexible as you need it to be.
 
 Todo:
 -----
