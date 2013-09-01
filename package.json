@@ -2,13 +2,13 @@
   "name": "milo",
   "version": "0.0.1",
   "dependencies": {
-    "ramrod": "git://github.com/gcpantazis/node-ramrod.git#master",
     "jsonminify": "~0.1",
     "jade": "~0.34",
     "mustache": "~0.7",
     "underscore": "~1.5",
     "underscore.string": "~2.3",
-    "node-markdown": "~0.1"
+    "node-markdown": "~0.1",
+    "express": "~3.3.7"
   },
   "main": "index.js",
   "engines": {

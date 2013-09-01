@@ -4,9 +4,8 @@
 
 'use strict';
 
-var http = require('http'),
-  fs = require('fs'),
-  ramrod = require('ramrod')(),
+var fs = require('fs'),
+  express = require('express')(),
   jsonMinify = require('jsonminify'),
   jade = require('jade'),
   _ = require('underscore');
@@ -24,7 +23,7 @@ var defaults = {
 };
 
 module.exports.use = function(cb) {
-  ramrod.use(cb);
+  express.use(cb);
 };
 
 module.exports.init = function(config) {
@@ -33,11 +32,15 @@ module.exports.init = function(config) {
 
   var bindRoute = function(routeFile) {
 
-    ramrod.add(routeFile.route, function(req, res, data) {
+    express.get(routeFile.route, function(req, res) {
 
       var layoutPath = config.layoutsDir + '/' + _.slugify(_.humanize(routeFile.layout)) + '.jade';
 
-      data = _.extend(data, routeFile, jadeHelpers(config, data));
+      var data = {};
+      data.path = req.params;
+
+      _.extend(data, routeFile);
+      _.extend(data, jadeHelpers(config, data));
 
       // Validate that the matched request meets all of the validation criteria
       // Set out in the route's JSON file.
@@ -77,7 +80,7 @@ module.exports.init = function(config) {
     // Temporary. 404 should probably be part of the base install...
     // I need it in a few places.
 
-    ramrod.on('*', function(req, res) {
+    express.get('*', function(req, res) {
       res.writeHead(404);
       res.end('404 - NOT FOUND');
     });
@@ -86,9 +89,6 @@ module.exports.init = function(config) {
     console.log('Milo is listening on localhost:' + config.port);
     console.log('-----------------------------------\n');
 
-    http.createServer(function(req, res) {
-      ramrod.dispatch(req, res);
-    }).listen(config.port);
-
+    express.listen(config.port);
   });
 };
