@@ -47,7 +47,11 @@ module.exports.init = function(config) {
           res.writeHead(200);
           res.end(jade.renderFile(layoutPath, data));
         } else if (data.service) {
-          require(process.cwd() + '/' + config.servicesDir + '/' + data.service)(req, res, data);
+          var services = require(process.cwd() + '/' + config.servicesDir + '/' + data.service);
+
+          _.each(services, function(service) {
+            service(req, res, data);
+          });
         } else {
           res.writeHead(500);
           res.end('500 - ROUTE NOT MAPPED TO VALID OUTPUT');
