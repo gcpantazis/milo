@@ -2,10 +2,12 @@
 // This is Milo's initializer.
 // ---------------------------
 
+'use strict';
+
 var http = require('http'),
   fs = require('fs'),
   ramrod = require('ramrod')(),
-  jsonminify = require('jsonminify'),
+  jsonMinify = require('jsonminify'),
   jade = require('jade'),
   _ = require('underscore');
 
@@ -19,7 +21,11 @@ var jadeHelpers = require('./lib/jade-helpers'),
 
 var defaults = {
   'port': 3000
-}
+};
+
+module.exports.use = function(cb) {
+  ramrod.use(cb);
+};
 
 module.exports.init = function(config) {
 
@@ -41,7 +47,7 @@ module.exports.init = function(config) {
           res.writeHead(200);
           res.end(jade.renderFile(layoutPath, data));
         } else if (data.service) {
-          require(process.cwd() + '/' + config.servicesDir + '/' + data.service)(req, res, data)
+          require(process.cwd() + '/' + config.servicesDir + '/' + data.service)(req, res, data);
         } else {
           res.writeHead(500);
           res.end('500 - ROUTE NOT MAPPED TO VALID OUTPUT');
@@ -51,7 +57,7 @@ module.exports.init = function(config) {
         res.end('404 - NOT FOUND');
       }
     });
-  }
+  };
 
   fs.readdir(config.routesDir, function(err, files) {
 
@@ -61,8 +67,8 @@ module.exports.init = function(config) {
       // I like having comments in the routes file, as they will likely be logical.
       // `.minify` strips comments out before parsing.
 
-      bindRoute(JSON.parse(JSON.minify(file)));
-    })
+      bindRoute(JSON.parse(jsonMinify(file)));
+    });
 
     // Temporary. 404 should probably be part of the base install...
     // I need it in a few places.
@@ -81,4 +87,4 @@ module.exports.init = function(config) {
     }).listen(config.port);
 
   });
-}
+};

@@ -9,6 +9,7 @@ Todo:
 -----
 
 * Extensibility. How would I make a Sass pipeline, etc.?
+  * Related, need an equivalent of expressjs's app.use() for middleware.
 * Remapping sources for localization, etc.
 * Related to mapping, remote data sources.
 * Static-izer - Generate a static site. Require that your routes map directly to model IDs for
