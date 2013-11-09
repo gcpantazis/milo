@@ -5,13 +5,15 @@
 'use strict';
 
 var fs = require('fs'),
-  express = require('express')(),
+  express = require('express'),
   jsonMinify = require('jsonminify'),
   jade = require('jade'),
   _ = require('underscore');
 
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
+
+var app = express();
 
 // Milo Library Modules
 
@@ -22,8 +24,10 @@ var defaults = {
   'port': 3000
 };
 
-module.exports.use = function(cb) {
-  express.use(cb);
+module.exports.express = express;
+
+module.exports.use = function() {
+  app.use.apply(app, arguments);
 };
 
 module.exports.init = function(config) {
@@ -32,7 +36,7 @@ module.exports.init = function(config) {
 
   var bindRoute = function(routeFile) {
 
-    express.get(routeFile.route, function(req, res) {
+    app.get(routeFile.route, function(req, res, next) {
 
       var layoutPath = config.layoutsDir + '/' + _.slugify(_.humanize(routeFile.layout)) + '.jade';
 
@@ -53,34 +57,44 @@ module.exports.init = function(config) {
           var services = require(process.cwd() + '/' + config.servicesDir + '/' + data.service);
 
           _.each(services, function(service) {
-            service(req, res, data);
+            service(req, res, next);
           });
-        } else {
-          res.writeHead(500);
-          res.end('500 - ROUTE NOT MAPPED TO VALID OUTPUT');
         }
       } else {
         res.writeHead(404);
         res.end('404 - NOT FOUND');
       }
+    }, function() {
+      // Do nothing.
     });
   };
+
+  // Bind static directories.
+
+  _.each(config.staticDirs, function(staticDir) {
+    app.use(staticDir, express.static(config.appDir + staticDir));
+  });
 
   fs.readdir(config.routesDir, function(err, files) {
 
     _.each(files, function(file) {
-      file = fs.readFileSync(config.routesDir + '/' + file).toString();
 
-      // I like having comments in the routes file, as they will likely be logical.
-      // `.minify` strips comments out before parsing.
+      if (file.split('.').pop() === 'json') {
 
-      bindRoute(JSON.parse(jsonMinify(file)));
+        file = fs.readFileSync(config.routesDir + '/' + file).toString();
+
+        // I like having comments in the routes file, as they will likely be logical.
+        // `.minify` strips comments out before parsing.
+
+        bindRoute(JSON.parse(jsonMinify(file)));
+      }
+
     });
 
     // Temporary. 404 should probably be part of the base install...
     // I need it in a few places.
 
-    express.get('*', function(req, res) {
+    app.get('*', function(req, res) {
       res.writeHead(404);
       res.end('404 - NOT FOUND');
     });
@@ -89,6 +103,6 @@ module.exports.init = function(config) {
     console.log('Milo is listening on localhost:' + config.port);
     console.log('-----------------------------------\n');
 
-    express.listen(config.port);
+    app.listen(config.port);
   });
 };
