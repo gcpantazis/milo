@@ -8,6 +8,7 @@ var fs = require('fs'),
   express = require('express'),
   jsonMinify = require('jsonminify'),
   jade = require('jade'),
+  html = require('html'),
   _ = require('underscore');
 
 _.str = require('underscore.string');
@@ -52,7 +53,10 @@ module.exports.init = function(config) {
       if (routeValidate(config, data)) {
         if (data.layout) {
           res.writeHead(200);
-          res.end(jade.renderFile(layoutPath, data));
+          var renderedJade = jade.renderFile(layoutPath, data);
+          res.end(html.prettyPrint(renderedJade, {
+            'indent_size': 2
+          }));
         } else if (data.service) {
           var services = require(process.cwd() + '/' + config.servicesDir + '/' + data.service);
 

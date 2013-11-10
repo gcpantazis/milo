@@ -1,14 +1,16 @@
 Milo
 ====
 
-*v0.0.1*
+*v0.0.2*
 
 In progress. Ideas for a db-less server / static site generator that's as flexible as you need it to be.
 
 Todo:
 -----
 
-* Extensibility. How would I make a Sass pipeline, etc.?
+* Setting global "state".
+* Helper methods for searching, iterating models.
+* Plug in other template langs, not just Jade.
 * Remapping sources for localization, etc.
 * Related to mapping, remote data sources.
 * Static-izer - Generate a static site. Require that your routes map directly to model IDs for
