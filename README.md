@@ -1,7 +1,7 @@
 Milo
 ====
 
-*v0.0.2*
+*v0.0.3*
 
 In progress. Ideas for a db-less server / static site generator that's as flexible as you need it to be.
 
