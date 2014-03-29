@@ -1,7 +1,7 @@
 Milo
 ====
 
-*v0.0.3*
+*v0.0.4*
 
 In progress. Ideas for a db-less server / static site generator that's as flexible as you need it to be.
 
@@ -18,5 +18,3 @@ Todo:
   * Something like the angular staticizer for SEO (year of moo link).
 * What do you do with binary files that "belong" to modules?
   * Separate folder structure that can be re-mapped?
-* Route validation should be optional, for when it isn't needed.
-  * Should also allow for routing services inside validation, like i can with layouts.

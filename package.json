@@ -1,6 +1,6 @@
 {
   "name": "milo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "jsonminify": "~0.1",
     "jade": "~0.34",
