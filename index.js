@@ -35,6 +35,8 @@ module.exports.init = function(config) {
 
   config = _.extend(defaults, config);
 
+  var cache = [];
+
   var bindRoute = function(routeFile) {
 
     app.get(routeFile.route, function(req, res, next) {
@@ -52,11 +54,28 @@ module.exports.init = function(config) {
 
       if (routeValidate(config, data)) {
         if (data.layout) {
+
           res.writeHead(200);
-          var renderedJade = jade.renderFile(layoutPath, data);
-          res.end(html.prettyPrint(renderedJade, {
-            'indent_size': 2
-          }));
+
+          if (cache[req.url]) {
+            res.end(cache[req.url]);
+            return;
+          }
+
+          var renderedJade = jade.renderFile(layoutPath, data),
+            output = html.prettyPrint(renderedJade, {
+              'indent_size': 2
+            });
+
+          if (data.ttl) {
+            cache[req.url] = output;
+            setTimeout(function() {
+              cache[req.url] = null;
+            }, data.ttl);
+          }
+
+          res.end(output);
+
         } else if (data.service) {
           var services = require(process.cwd() + '/' + config.servicesDir + '/' + data.service);
 
