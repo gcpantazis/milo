@@ -1,6 +1,25 @@
 {
   "name": "milo",
   "version": "0.0.5",
+  "description": "",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gcpantazis/milo.git"
+  },
+  "keywords": [
+    "express",
+    "static",
+    "nodb"
+  ],
+  "author": "George Pantazis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gcpantazis/milo/issues"
+  },
+  "homepage": "https://github.com/gcpantazis/milo",
   "dependencies": {
     "jsonminify": "~0.1",
     "jade": "~0.34",
@@ -11,6 +30,7 @@
     "express": "~3.3.7",
     "html": "0.0.7"
   },
+  "devDependencies": {},
   "main": "index.js",
   "engines": {
     "node": "~0.10",
